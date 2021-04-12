@@ -11,7 +11,7 @@ object Kmeans {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org").setLevel(Level.OFF)
     Logger.getLogger("akka").setLevel(Level.OFF)
-    val conf = new SparkConf().setMaster("local[*]").setAppName("streaming")
+    val conf = new SparkConf().setMaster("local[*]").setAppName("K-meansTest")
       .set("spark.ui.enabled", "True")
       .set("spark.ui.port", "4040")
     val sc = new SparkContext(conf)
