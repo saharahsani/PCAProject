@@ -51,6 +51,7 @@ class OnlineClustering {
         this.N += currentN
         this.time += 1
         println("time is: "+this.time)
+
       }
     }
   }
