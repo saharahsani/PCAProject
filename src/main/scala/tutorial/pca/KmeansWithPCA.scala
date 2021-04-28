@@ -1,11 +1,12 @@
 package tutorial.pca
 
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.mllib.clustering.KMeans
-import org.apache.spark.mllib.linalg.{Matrix, Vectors}
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
+import org.apache.spark.mllib.linalg.{Matrix, Vectors}
 import org.apache.spark.{SparkConf, SparkContext}
-import java.time.{Duration, Instant}
+
+import java.io.FileWriter
+import java.time.Instant
 
 object KmeansWithPCA {
   def main(args: Array[String]): Unit = {
@@ -18,20 +19,25 @@ object KmeansWithPCA {
     sc.setLogLevel("ERROR")
 
     // Load 2000 record and parse the data
-    val data = sc.textFile("src/resources/splitKdd2000.csv")
+    val data = sc.textFile("src/resources/powersupply.csv")
     val parsedData = data.map(s => Vectors.dense(s.split(',').map(_.toDouble)))
+    val start = Instant.now()
 
     /**
      * PCA Phase
      */
     val mat: RowMatrix = new RowMatrix(parsedData)
-    val pc: Matrix = mat.computePrincipalComponents(5)
+    val pc: Matrix = mat.computePrincipalComponents(1)
     val projected: RowMatrix = mat.multiply(pc)
-    val start = Instant.now()
-    /**
-     * Kmeans Algorithm
-     */
-    val numClusters = 50
+
+    val fileWritter = new FileWriter("src/resources/powerPCAC.csv", true);
+    projected.rows.collect().foreach { x =>
+      fileWritter.write(x.toArray.mkString(",") + "\n")
+
+      /**
+       * Kmeans Algorithm
+       */
+      /*val numClusters = 50
     val numIterations = 20
     val clusters = KMeans.train(projected.rows, numClusters, numIterations)
 
@@ -42,5 +48,7 @@ object KmeansWithPCA {
 
     val durationStep = Duration.between(start, end).toMillis
     println("elapsed time: " + durationStep + " ms")
+  */
+    }
   }
 }

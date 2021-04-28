@@ -18,7 +18,7 @@ object Kmeans {
     sc.setLogLevel("ERROR")
 
     // Load and parse the data
-    val data = sc.textFile("src/resources/splitKdd2000.csv")
+    val data = sc.textFile("src/resources/covtype.csv")
     val parsedData = data.map(s => Vectors.dense(s.split(',').map(_.toDouble)))
     val start=Instant.now()
 

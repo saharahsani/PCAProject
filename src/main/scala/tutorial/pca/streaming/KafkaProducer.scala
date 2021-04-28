@@ -44,11 +44,11 @@ object KafkaProducer extends  App() {
   val fileName2 = "src/resources/Iris.txt"
   val fileName3="src/resources/powersupply.csv"
   val fileName4="src/resources/Covtype.csv"
-
-
+  val fileName5="src/resources/testCovtype.csv"
+  val fileName6="src/resources/testKdd.csv"
   try {
     var i = 0
-    for (line <- Source.fromFile(fileName1).getLines) {
+    for (line <- Source.fromFile(fileName6).getLines) {
       {
         i += 1
         val message = line + "\n"

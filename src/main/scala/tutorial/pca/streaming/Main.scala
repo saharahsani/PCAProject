@@ -40,6 +40,7 @@ object Main {
       Subscribe[String, String](topics, kafkaParams)
     )
     val streamData = stream.map(x => Vectors.dense(x.value().split(",").map(_.toDouble)))
+
     val model = new OnlineClustering()
     model.Run(streamData)
     ssc.start()
