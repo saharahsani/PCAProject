@@ -24,11 +24,11 @@ class OnlineClustering {
    */
   def preProcessing(rdd: RDD[linalg.Vector]): RDD[org.apache.spark.mllib.linalg.Vector] = {
     val mat: RowMatrix = new RowMatrix(rdd)
-    val pc: Matrix = mat.computePrincipalComponents(15)
+    val pc: Matrix = mat.computePrincipalComponents(20)
     val projected: RowMatrix = mat.multiply(pc)
     val spark = SparkSession.builder.getOrCreate()
     // projected.rows.map(x=>x.toArray.mkString(",")).repartition(1).toDF("asv").write.mode("append").csv("src/resources/powerPca")
-    val fileWritter = new FileWriter("src/resources/kddPCASC15.csv", true)
+    val fileWritter = new FileWriter("src/resources/testCovPCA.csv", true)
     projected.rows.collect().foreach { x =>
       fileWritter.write(x.toArray.mkString(",")+"\n")
     }
@@ -44,11 +44,11 @@ class OnlineClustering {
   def clustering(data: RDD[linalg.Vector]) = {
     val numClusters = 50
     val numIterations = 20
-    val clusters = KMeans.train(data, numClusters, numIterations)
+   // val clusters = KMeans.train(data, numClusters, numIterations)
 
     // Evaluate clustering by computing Within Set Sum of Squared Errors
-    val WSSSE = clusters.computeCost(data)
-    println(s"Within Set Sum of Squared Errors = $WSSSE")
+   // val WSSSE = clusters.computeCost(data)
+  //  println(s"Within Set Sum of Squared Errors = $WSSSE")
 
   }
 

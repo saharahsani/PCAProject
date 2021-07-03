@@ -17,14 +17,14 @@ object SVDexample {
     val sc = new SparkContext(conf)
     sc.setLogLevel("ERROR")
     // Load 2000 record and parse the data
-    val data = sc.textFile("src/resources/testKdd.csv")
-    val parsedData = data.map(s => Vectors.dense(s.split(',').map(_.toDouble)))
-    // val scaler1 = new StandardScaler().fit(parsedData.map(x => x))
+    val data = sc.textFile("src/resources/testKddLabel.csv").map(s => s.split('-'))
+    val parsedData= data.map(x=>x(0).split(",").map(_.toDouble)).map(x=> Vectors.dense(x))
+
     val scaler2 = new StandardScaler(withMean = true, withStd = true).fit(parsedData.map(x => x))
 
     // data2 will be unit variance and zero mean.
     val data_std = parsedData.map(x => scaler2.transform(Vectors.dense(x.toArray)))
-    val fileWritter = new FileWriter("src/resources/testKdd_scaled.csv" )
+    val fileWritter = new FileWriter("src/resources/scaledTestKddLabel.csv" )
     data_std.collect().foreach { x =>
       fileWritter.write(x.toArray.mkString(",") + "\n")
     }
